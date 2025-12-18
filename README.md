@@ -1,1 +1,7 @@
-# fit2vid
+# fit2png
+
+## How to use?
+
+```shell
+uv sync
+```
