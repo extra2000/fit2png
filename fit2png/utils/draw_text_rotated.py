@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 
-def draw_text_rotated(image, text, color, x, y, angle=90):
+def draw_text_rotated(image, text, color, x, y, bottommargin, angle=90):
     # Define font
     font_size = 24
     try:
@@ -30,7 +30,7 @@ def draw_text_rotated(image, text, color, x, y, angle=90):
         x - padding,
         y - padding,
         x + rw + padding/3,
-        976], #y + rh + padding],
+        bottommargin + 26], #y + rh + padding],
         fill='black'
     )
 

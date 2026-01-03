@@ -8,8 +8,9 @@ from . import get_address, image_draw
 from ..common import NO_SIGNAL
 
 def render_hud(data, max_hr, outdir, geopy_call_interval=10, wait_for_geopy=False, enforce_privacy=False):
-    leftmargin = (528 + 864) / 2
-    bottommargin = 950
+    leftmargin = 50
+    bottommargin = 150
+    screen_resolution = (864, bottommargin + 26 + 10)
     yspacing = 34
     prev_timestamp = None
     xprev = None
@@ -33,11 +34,11 @@ def render_hud(data, max_hr, outdir, geopy_call_interval=10, wait_for_geopy=Fals
             if diff_time > 1:
                 # Pad idle frames for easier Video Editing
                 for i in range(1, int(diff_time)):
-                    green_image = Image.new('RGB', (1920, 1080), color='green')
+                    green_image = Image.new('RGB', screen_resolution, color='green')
                     image_draw(green_image, prev_timestamp + datetime.timedelta(seconds=i), xprev, address, max_hr, leftmargin, bottommargin, yspacing, enforce_privacy, is_active=False)
                     green_image.save(path.join(outdir, f'{frame_counter:05d}.png'))
                     frame_counter += 1
-        green_image = Image.new('RGB', (1920, 1080), color='green')
+        green_image = Image.new('RGB', screen_resolution, color='green')
         image_draw(green_image, current_timestamp, x, address, max_hr, leftmargin, bottommargin, yspacing, enforce_privacy)
         green_image.save(path.join(outdir, f'{frame_counter:05d}.png'))
         frame_counter += 1

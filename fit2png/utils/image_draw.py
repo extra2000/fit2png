@@ -28,4 +28,4 @@ def image_draw(green_image, current_time, x, address, max_hr, leftmargin, bottom
     draw_text(draw, str(f"{day_name} {temp}\u00b0C {current_time} (MYT)"), 'white', leftmargin, bottommargin - yspacing*2)
     draw_text(draw, str(f"{speed_kmh:.2f} KM/H, {distance_km:.4f} KM, ALT {altitude:.1f} M"), color, leftmargin, bottommargin - yspacing)
     draw_text(draw, str(f"{hr}/{max_hr} BPM Z{get_hr_zone(hr, max_hr)} ({(hr/max_hr)*100:.2f}%)"), color, leftmargin, bottommargin)
-    draw_text_rotated(green_image, f"CYCPLUS M1", 'white', leftmargin - 37, bottommargin - yspacing*4+2, 270)
+    draw_text_rotated(green_image, f"CYCPLUS M1", 'white', leftmargin - 37, bottommargin - yspacing*4+2, bottommargin, 270)
