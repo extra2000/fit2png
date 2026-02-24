@@ -6,3 +6,9 @@ from .draw_text_vertical import draw_text_vertical
 from .get_address import get_address
 from .image_draw import image_draw
 from .render_hud import render_hud
+from .apply_mask import apply_mask
+from .color_for_class_id import color_for_class_id
+from .computer_vision_hud import computer_vision_hud
+from .draw_corner_box import draw_corner_box
+from .draw_label import draw_label
+from .draw_shaded_box import draw_shaded_box

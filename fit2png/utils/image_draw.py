@@ -1,13 +1,15 @@
 from PIL import ImageDraw
 
-from ..common import SEMICIRCLES_TO_DEGREES, NO_SIGNAL
-from . import get_hr_zone, draw_text, draw_text_rotated
+from ..common import SEMICIRCLES_TO_DEGREES, NO_SIGNAL, HEART_RATE_UNAVAILABLE
+from .get_hr_zone import get_hr_zone
+from .draw_text import draw_text
+from .draw_text_rotated import draw_text_rotated
 
 def image_draw(green_image, current_time, x, address, max_hr, leftmargin, bottommargin, yspacing, enforce_privacy=False, is_active=True):
     draw = ImageDraw.Draw(green_image)
     speed_kmh = x['speed'] * 3.6
     distance_km = x['distance'] / 1000
-    hr = x['heart_rate']
+    hr = x.get('heart_rate', None)
     temp = x['temperature']
 
     pos_lat = x.get('position_lat', None)
@@ -24,8 +26,13 @@ def image_draw(green_image, current_time, x, address, max_hr, leftmargin, bottom
     color = "white" if is_active else "yellow"
 
     draw_text(draw, address, color, leftmargin, bottommargin - yspacing*4, mono=False)
-    draw_text(draw, str(f"LAT {pos_lat}, LONG {pos_long}"), color, leftmargin, bottommargin - yspacing*3)
-    draw_text(draw, str(f"{day_name} {temp}\u00b0C {current_time} (MYT)"), 'white', leftmargin, bottommargin - yspacing*2)
+    draw_text(draw, str(f"{pos_lat}, {pos_long}"), color, leftmargin, bottommargin - yspacing*3)
+    draw_text(draw, str(f"{day_name} {temp}\u00b0C {current_time}"), 'white', leftmargin, bottommargin - yspacing*2)
     draw_text(draw, str(f"{speed_kmh:.2f} KM/H, {distance_km:.4f} KM, ALT {altitude:.1f} M"), color, leftmargin, bottommargin - yspacing)
-    draw_text(draw, str(f"{hr}/{max_hr} BPM Z{get_hr_zone(hr, max_hr)} ({(hr/max_hr)*100:.2f}%)"), color, leftmargin, bottommargin)
+
+    if hr is not None:
+        draw_text(draw, str(f"{hr}/{max_hr} BPM Z{get_hr_zone(hr, max_hr)} ({(hr / max_hr) * 100:.2f}%)"), color, leftmargin, bottommargin)
+    else:
+        draw_text(draw, HEART_RATE_UNAVAILABLE, color, leftmargin, bottommargin)
+
     draw_text_rotated(green_image, f"CYCPLUS M1", 'white', leftmargin - 37, bottommargin - yspacing*4+2, bottommargin, 270)

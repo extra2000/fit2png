@@ -3,15 +3,17 @@ from os import path
 from time import sleep
 
 from PIL import Image
+from geopy.exc import GeocoderUnavailable
 
-from . import get_address, image_draw
-from ..common import NO_SIGNAL
+from .get_address import get_address
+from .image_draw import image_draw
+from ..common import NO_SIGNAL, GEODATA_UNAVAILABLE
 
 def render_hud(data, max_hr, outdir, geopy_call_interval=10, wait_for_geopy=False, enforce_privacy=False):
     leftmargin = 50
-    bottommargin = 150
-    screen_resolution = (864, bottommargin + 26 + 10)
-    yspacing = 34
+    bottommargin = 130
+    screen_resolution = (864, bottommargin + 45 + 10)
+    yspacing = 30
     prev_timestamp = None
     xprev = None
     frame_counter = 0
@@ -25,7 +27,12 @@ def render_hud(data, max_hr, outdir, geopy_call_interval=10, wait_for_geopy=Fals
         pos_lat = x.get('position_lat', None)
         pos_long = x.get('position_long', None)
         if pos_lat is not None and pos_long is not None:
-            address, last_geopy_call = get_address(address, pos_lat, pos_long, last_geopy_call, geopy_call_interval, enforce_privacy)
+            try:
+                address, last_geopy_call = get_address(
+                    address, pos_lat, pos_long, last_geopy_call, geopy_call_interval, enforce_privacy
+                )
+            except GeocoderUnavailable:
+                address = GEODATA_UNAVAILABLE
         else:
             address = NO_SIGNAL
 
@@ -35,7 +42,18 @@ def render_hud(data, max_hr, outdir, geopy_call_interval=10, wait_for_geopy=Fals
                 # Pad idle frames for easier Video Editing
                 for i in range(1, int(diff_time)):
                     green_image = Image.new('RGB', screen_resolution, color='green')
-                    image_draw(green_image, prev_timestamp + datetime.timedelta(seconds=i), xprev, address, max_hr, leftmargin, bottommargin, yspacing, enforce_privacy, is_active=False)
+                    image_draw(
+                        green_image,
+                        prev_timestamp + datetime.timedelta(seconds=i),
+                        xprev,
+                        address,
+                        max_hr,
+                        leftmargin,
+                        bottommargin,
+                        yspacing,
+                        enforce_privacy,
+                        is_active=False,
+                    )
                     green_image.save(path.join(outdir, f'{frame_counter:05d}.png'))
                     frame_counter += 1
         green_image = Image.new('RGB', screen_resolution, color='green')

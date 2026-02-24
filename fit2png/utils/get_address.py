@@ -44,7 +44,7 @@ def get_address(address: str, pos_lat: float, pos_long: float, last_geopy_call: 
     else:
         address = f"{road}{neigh}{city}{state}"
 
-    if len(address) > 60:
-        return f"{address[:60]}...", datetime.datetime.now()
+    if len(address) > 44:
+        return f"{address[:41]}...", datetime.datetime.now()
     else:
         return address, datetime.datetime.now()
