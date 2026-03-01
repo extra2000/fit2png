@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
+    "argcomplete==3.6.3",
     "av==16.1.0",
     "contextily>=1.7.0",
     "garmin-fit-sdk>=21.178.0",
@@ -12,5 +13,50 @@ dependencies = [
     "jupyterlab>=4.5.1",
     "matplotlib>=3.10.8",
     "pandas>=2.3.3",
+    "pyyaml==6.0.3",
     "ultralytics==8.4.14",
+]
+
+[tool.uv]
+package = true
+
+[project.scripts]
+fit2png-cli = "src.fit2png.console:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.15.4",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-v"
+testpaths = [
+    "tests",
+]
+
+[tool.ruff.lint]
+select = ['ALL']
+ignore = []
+
+[tool.ruff.lint.extend-per-file-ignores]
+"src/*" = [
+    "E501",
+    "C901",
+    "PLR0915",
+]
+"tests/*" = [
+    "INP001", # Ignore the implicit-namespace-package rule for the tests directory
+    "D100", # Ignore the missing docstring rule for test files
+    "S603", # Ignore subprocess call with shell=True
+    "S101", # Ignore use of assert
+    "E501",
 ]

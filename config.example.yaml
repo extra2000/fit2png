@@ -1,0 +1,25 @@
+fit:
+  filename: 'input/20260223202859.fit'
+  max_hr: 172
+
+minimap:
+  max_tails: 30
+
+geopy:
+  call_interval: 1
+  wait: True
+
+video:
+  paths:
+    - '/path/to/video.mp4'
+
+cv:
+  model:
+    bbox: 'models/yolo26x.pt'
+    seg: 'models/yolo26x-seg.pt'
+
+audiometer:
+  floor_db: -36.0
+  ceiling_db: 3.0
+
+outdir: 'rendered'
