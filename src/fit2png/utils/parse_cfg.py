@@ -28,5 +28,6 @@ def parse_cfg(config_fname: str) -> dict:
             "seg_outdir": str(Path(cfg["outdir"]) / fit_id / "seg"),
             "label_outdir": str(Path(cfg["outdir"]) / fit_id / "label"),
             "audiometer_outdir": str(Path(cfg["outdir"]) / fit_id / "audiometer"),
+            "depth_outdir": str(Path(cfg["outdir"]) / fit_id / "depth"),
         }
         return cfg

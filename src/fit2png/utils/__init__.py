@@ -1,3 +1,4 @@
+from src.fit2png.utils.depth_hud import depth_hud
 from src.fit2png.utils.parse_cfg import parse_cfg
 from src.fit2png.utils.render_audiometer import render_audiometer
 from src.fit2png.utils.render_minimap import render_minimap
@@ -21,6 +22,7 @@ __all__ = [
     "apply_mask",
     "color_for_class_id",
     "computer_vision_hud",
+    "depth_hud",
     "draw_corner_box",
     "draw_label",
     "draw_shaded_box",

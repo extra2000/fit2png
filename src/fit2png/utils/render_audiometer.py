@@ -170,8 +170,8 @@ def render_audiometer(video_paths: str, audiometer_outdir: str, floor_db: float,
             i0 = int(t0 * sr)
             i1 = int(t1 * sr)
 
-            # l_dbfs, r_dbfs = frame_loudness_lr(audio_lr, i0, i1)
-            l_dbfs, r_dbfs = frame_volume_lr_peak(audio_lr, i0, i1)
+            l_dbfs, r_dbfs = frame_loudness_lr(audio_lr, i0, i1)
+            #l_dbfs, r_dbfs = frame_volume_lr_peak(audio_lr, i0, i1)
 
 
             # Plot loudness meter

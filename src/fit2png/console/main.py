@@ -9,7 +9,7 @@ from pprint import PrettyPrinter
 import argcomplete
 
 from src.fit2png import __version__
-from src.fit2png.utils import computer_vision_hud, parse_cfg, read_fit, render_hud, render_minimap, render_audiometer
+from src.fit2png.utils import computer_vision_hud, parse_cfg, read_fit, render_hud, render_minimap, render_audiometer, depth_hud
 
 log = logging.getLogger(__name__)
 pp = PrettyPrinter(indent=2, width=80, compact=True)
@@ -34,6 +34,7 @@ def _app() -> None:
         "minimap": partial(_minimap, args),
         "cv": partial(_cv, args),
         "audiometer": partial(_audiometer, args),
+        "depth": partial(_depth, args)
     }
 
     choice = command.get(args.command, parser.print_help())
@@ -86,6 +87,8 @@ def _parse_args() -> tuple[argparse.Namespace, argparse.ArgumentParser]:
 
     cv = subparser.add_parser("cv", help="Render Detection HUD")
 
+    depth = subparser.add_parser("depth", help="Render Depth HUD")
+
     audiometer = subparser.add_parser("audiometer", help="Render Audio Meter HUD")
 
     argcomplete.autocomplete(parser)
@@ -129,6 +132,11 @@ def _cv(args: argparse.Namespace) -> None:
     computer_vision_hud(cfg["video"]["paths"], cfg["cv"]["model"]["bbox"],
                         cfg["cv"]["model"]["seg"], cfg["computed"]["bbox_outdir"],
                         cfg["computed"]["seg_outdir"], cfg["computed"]["label_outdir"])
+
+def _depth(args: argparse.Namespace) -> None:
+    cfg = parse_cfg(args.config)
+    Path(cfg["computed"]["depth_outdir"]).mkdir(parents=True, exist_ok=True)
+    depth_hud(cfg["video"]["paths"], cfg["cv"]["model"]["depth"]["name"], cfg["cv"]["model"]["depth"]["size"], cfg["computed"]["depth_outdir"])
 
 def _audiometer(args: argparse.Namespace) -> None:
     cfg = parse_cfg(args.config)

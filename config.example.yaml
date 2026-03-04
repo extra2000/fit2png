@@ -17,6 +17,9 @@ cv:
   model:
     bbox: 'models/yolo26x.pt'
     seg: 'models/yolo26x-seg.pt'
+    depth:
+      name: 'intel-isl/MiDaS'
+      size: 'DPT_Large'
 
 audiometer:
   floor_db: -36.0
