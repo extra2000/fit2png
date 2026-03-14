@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def parse_cfg(config_fname: str) -> dict:
@@ -16,7 +16,7 @@ def parse_cfg(config_fname: str) -> dict:
     :rtype: dict
     """
     with Path(config_fname).open("r") as f:
-        log.info("Using config file: %s", str(Path(config_fname).resolve()))
+        logger.info("Using config file: %s", str(Path(config_fname).resolve()))
         cfg = yaml.safe_load(f)
         fit_id = Path(cfg["fit"]["filename"]).stem
         cfg["computed"] = {

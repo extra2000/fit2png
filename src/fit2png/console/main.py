@@ -11,7 +11,7 @@ import argcomplete
 from src.fit2png import __version__
 from src.fit2png.utils import computer_vision_hud, parse_cfg, read_fit, render_hud, render_minimap, render_audiometer, depth_hud
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 pp = PrettyPrinter(indent=2, width=80, compact=True)
 
 
@@ -20,14 +20,14 @@ def main() -> None:
     try:
         _app()
     except KeyboardInterrupt:
-        log.info("Received keyboard interrupt. Exiting.")
+        logger.info("Received keyboard interrupt. Exiting.")
 
 def _app() -> None:
     args, parser = _parse_args()
 
     _init_log(args.loglevel)
 
-    log.info("fit2png version %s", __version__)
+    logger.info("fit2png version %s", __version__)
 
     command = {
         "fit": partial(_fit, args),
@@ -100,7 +100,7 @@ def _parse_args() -> tuple[argparse.Namespace, argparse.ArgumentParser]:
 def _fit(args: argparse.Namespace) -> None:
     cfg = parse_cfg(args.config)
     data = read_fit(cfg["fit"]["filename"])
-    log.info(data["file_id_mesgs"][0])
+    logger.info(data["file_id_mesgs"][0])
 
     if not args.redacted:
         Path(cfg["computed"]["hud_outdir"]).mkdir(parents=True, exist_ok=True)
@@ -116,11 +116,11 @@ def _fit(args: argparse.Namespace) -> None:
 def _minimap(args: argparse.Namespace) -> None:
     cfg = parse_cfg(args.config)
     data = read_fit(cfg["fit"]["filename"])
-    log.info(data["file_id_mesgs"][0])
+    logger.info(data["file_id_mesgs"][0])
 
     Path(cfg["computed"]["minimap_outdir"]).mkdir(parents=True, exist_ok=True)
 
-    render_minimap(data, cfg["computed"]["minimap_outdir"], cfg["geopy"]["call_interval"])
+    render_minimap(data, cfg["computed"]["minimap_outdir"], cfg["minimap"]["max_tails"])
 
 def _cv(args: argparse.Namespace) -> None:
     cfg = parse_cfg(args.config)

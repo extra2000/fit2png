@@ -65,6 +65,8 @@ def render_audiometer(video_paths: str, audiometer_outdir: str, floor_db: float,
     """Render audiometer HUD."""
     frame_idx = 0
     for video_path in video_paths:
+        frame_idx_per_video = 0
+
         # Video via OpenCV (frames)
         cap = cv2.VideoCapture(video_path)
         fps = cap.get(cv2.CAP_PROP_FPS)
@@ -139,7 +141,7 @@ def render_audiometer(video_paths: str, audiometer_outdir: str, floor_db: float,
         # dB tick labels on the X axis
         # [-60, -56, -52, -48, -44, -40, -36, -32, -28, -24, -20, -16, -12, -8, -4, 0]
         # [-60, -48, -36, -24, -12, -6, 0]
-        ticks_db = np.array([-36, -12, 0], dtype=float)
+        ticks_db = np.array([-60, -36, 0], dtype=float)
         ax.set_xticks(10 ** (ticks_db / 20.0))
         ax.set_xticklabels([f"{int(t)} dB" for t in ticks_db])
 
@@ -164,8 +166,8 @@ def render_audiometer(video_paths: str, audiometer_outdir: str, floor_db: float,
             if not ok:
                 break
 
-            t0 = frame_idx * frame_duration
-            t1 = (frame_idx + 1) * frame_duration
+            t0 = frame_idx_per_video * frame_duration
+            t1 = (frame_idx_per_video + 1) * frame_duration
 
             i0 = int(t0 * sr)
             i1 = int(t1 * sr)
@@ -202,6 +204,7 @@ def render_audiometer(video_paths: str, audiometer_outdir: str, floor_db: float,
 
 
             frame_idx += 1
+            frame_idx_per_video += 1
             plt.close(fig)
 
         cap.release()
